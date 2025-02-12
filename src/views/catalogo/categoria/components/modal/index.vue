@@ -5,9 +5,9 @@
             <ion-buttons slot="start">
             <ion-button fill="outline" @click="setOpen(false)">Cancelar</ion-button>
             </ion-buttons>
-            <ion-title class="ion-text-center">Crear</ion-title>
+            <ion-title class="ion-text-center">{{ titulo }}</ion-title>
             <ion-buttons slot="end">
-            <ion-button fill="solid" :strong="true" @click="confirm()">Confirmar</ion-button>
+            <ion-button fill="solid" :strong="true" @click="confirm()" :disabled="$v.$invalid">Confirmar</ion-button>
             </ion-buttons>
         </ion-toolbar>
         </ion-header>
@@ -17,44 +17,111 @@
             v-model="objForm.nombre"
             label="Ingrese el nombre"
             label-placement="stacked"
+            :error="$v.nombre.$error"
             ref="input"
             type="text"
             placeholder="Nombre"
             ></ion-input>
         </ion-item>
+        <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="5000"></ion-toast>
         </ion-content>
     </ion-modal>
 </template>  
 
 <script setup>
 
-import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput } from '@ionic/vue';
-import { defineEmits, ref } from 'vue';
+import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput, IonToast } from '@ionic/vue';
+import { defineEmits, ref , onMounted } from 'vue';
 import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
 
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
+const props = defineProps(['accion','id']);
 const emit = defineEmits(['abrirModal','updateList','mensaje']);
 
 
 var objForm= ref({});
 objForm.value.nombre="";
+var mensaje=ref();
+let swOpen=ref(false);
+let titulo=ref();
+
 
 
 const setOpen=((sw)=>{
     emit('abrirModal',sw);
 });
 
+onMounted(()=>{
+
+    if(props.accion=='editar'){
+        titulo.value='Editar'
+        editar(props.id);
+
+    }else{
+        titulo.value='Crear'
+    }
+
+});
+
 const confirm=(async(sw)=>{
     try {
-        await API_CATEGORIAS.store(objForm.value);
-        emit('mensaje','Se guardo con Éxito');
+        if(props.accion=='crear'){
+            await API_CATEGORIAS.store(objForm.value);
+            emit('mensaje','Se guardo con Éxito');
+        }else if(props.accion=='editar'){
+            await API_CATEGORIAS.update(props.id,objForm.value);
+            emit('mensaje','Se actualizó con Éxito');
+        }
+        
         emit('updateList');
         emit('abrirModal',sw);        
 
     } catch (error) {
         console.log("error",error);
+        swOpen.value=true;
+        mensaje.value=error.response.data.message;
+        setTimeout(()=>{
+            swOpen.value=false;
+            mensaje.value='';
+        },5000);
+        
+        
     }
 
 })
+
+const editar= (async(id)=>{
+
+    try {
+        let resul = await API_CATEGORIAS.edit(id);
+        objForm.value.nombre=resul[0].nombre;
+    } catch (error) {
+        console.log("error",error);
+    }
+});
+
+
+
+const rules = {
+  nombre: { required },
+};
+
+const $v = ref(useVuelidate(rules, objForm.value));
+
+const validCurrentStep = async () => {
+  const isvalid = await $v.value.$validate();
+
+  if (!isvalid) {
+    const errors = $v.value.$errors;
+    // console.log(errors);
+    return false;
+  }
+
+  return true;
+};
+
+defineExpose({ validCurrentStep });
 
 </script>

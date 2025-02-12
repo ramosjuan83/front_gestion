@@ -1,6 +1,6 @@
 <template>
   <ion-fab horizontal="end" vertical="bottom">
-      <ion-fab-button>
+      <ion-fab-button :disabled="progress">
         <ion-icon :icon="add"  @click="setOpen(true)"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -14,7 +14,9 @@
       <ion-item v-for="(fila, index) in data" :key="index">
         <ion-label>{{ fila.id }}</ion-label>
         <ion-label horizontal="right">{{ fila.nombre }}</ion-label>
-        <ion-label> <ion-fab-button size="small"><ion-icon :icon="trash" size="small"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
+        <ion-label> <ion-fab-button size="small" :disabled="progress"><ion-icon :icon="trash" size="small"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
+        <ion-label> <ion-fab-button size="small" :disabled="progress"><ion-icon :icon="create" size="small"  @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
+
       </ion-item>
     </ion-list>
     <ion-infinite-scroll @ionInfinite="ionInfinite">
@@ -25,11 +27,11 @@
     </ion-infinite-scroll> -->
     
 
-    <componentModal v-if="isOpen" @mensaje="mostrarMensaje" @abrirModal="abrirModal" @updateList="updateList"/>
+    <componentModal v-if="isOpen" @mensaje="mostrarMensaje" @abrirModal="abrirModal" @updateList="updateList" :accion="accion" :id="id"/>
     <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="5000"></ion-toast>
 
     <ion-alert trigger="present-alert" class="custom-alert" header="Are you sure?" :buttons="alertButtons"></ion-alert>
-
+    
   </ion-content>
  
  
@@ -38,7 +40,7 @@
 
 <script setup>
   import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonInfiniteScroll, IonInfiniteScrollContent ,IonAlert, alertController } from '@ionic/vue';
-  import { add, trash } from 'ionicons/icons';
+  import { add, trash, create } from 'ionicons/icons';
   import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
   import { onMounted, ref } from 'vue';
   import componentModal from './components/modal/index.vue'
@@ -51,12 +53,12 @@
   let mostrarAlert=ref(false);
   let mensaje=ref('');
   let error1=ref('');
+  let progress=ref(false);
 
   let listar = (async()=>{
 
     try {
       const res = await API_CATEGORIAS.get(param);
-      console.log("respuesta",res);
       data.value=res;
     } catch (error) {
       console.log("ERROR",error);
@@ -70,8 +72,11 @@
 
   const isOpen = ref(false);
   const idDelete = ref();
+  var accion = ref('crear');
+  var id=ref();
 
   const setOpen = ((open) => {
+    accion.value='crear';
     isOpen.value = open
   }
   );
@@ -91,8 +96,10 @@
   
   const updateList = (()=>{
     listar();
+    progress.value=true;
     swOpen.value = true;
     setTimeout(()=>{
+      progress.value=false;
       swOpen.value=false;
       mensaje.value='';
     },5000);
@@ -140,6 +147,13 @@ const presentAlert = async (id) => {
 const mostrarMensaje=((msg)=>{
   mensaje.value=msg;
 })
+
+const edit=((idEdit)=>{
+
+    accion.value='editar';
+    id.value=idEdit;
+    isOpen.value=true;
+});
 
 
 

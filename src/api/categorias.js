@@ -10,7 +10,6 @@ export const categorias = {
           },
         })
         .then((res) => {
-          console.log("res",res.data);
           resolve(res.data);
         })
         .catch((err) => {
@@ -45,7 +44,7 @@ export const categorias = {
   edit(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/cliente/${id}/edit`)
+        .get(`/categoria/${id}`)
         .then((res) => {
           resolve(res.data);
         })
@@ -55,10 +54,9 @@ export const categorias = {
     });
   },
   update(id,data) {
-
     return new Promise((resolve, reject) => {
       axios
-        .put(`/cliente/${id}`, data)
+        .put(`/categoria/${id}`, data)
         .then((res) => {
           resolve(res.data);
         })
