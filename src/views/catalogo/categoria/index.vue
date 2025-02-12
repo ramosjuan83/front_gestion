@@ -9,12 +9,12 @@
       <ion-item>
         <ion-label><strong>Nro</strong></ion-label>
         <ion-label><strong>Categoria</strong></ion-label>
-        <ion-label><strong>Acción</strong> Error {{ error1 }}</ion-label>
+        <ion-label><strong>Acción</strong></ion-label>
       </ion-item>
       <ion-item v-for="(fila, index) in data" :key="index">
         <ion-label>{{ fila.id }}</ion-label>
         <ion-label horizontal="right">{{ fila.nombre }}</ion-label>
-        <!-- <ion-label> <ion-fab-button size="small"><ion-icon :icon="trash" size="small"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label> -->
+        <ion-label> <ion-fab-button size="small"><ion-icon :icon="trash" size="small"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
       </ion-item>
     </ion-list>
     <ion-infinite-scroll @ionInfinite="ionInfinite">
