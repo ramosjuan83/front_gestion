@@ -5,30 +5,52 @@
       </ion-fab-button>
     </ion-fab>
   <ion-content color="light">
+
+  <ion-list >    
+    <ion-grid>
+      <ion-row>
+        <ion-col><div style="width: 75px"><strong>Nro</strong></div></ion-col>
+        <ion-col><div style="width: 150px; text-align: center;"><strong>Categoria</strong></div></ion-col>
+        <ion-col><div style="width: 75px"><strong>Tipo</strong></div></ion-col>
+        <ion-col><div style="width: 50px"><strong>Acción</strong></div></ion-col>
+  
+      </ion-row>
+      <ion-row v-for="(fila, index) in data" :key="index">
+        <ion-col><div style="width: 75px">{{ fila.id }}</div></ion-col>
+        <ion-col><div style="width: 150px; text-align: justify;">{{ fila.nombre }}</div></ion-col>
+        <ion-col><div style="text-align: center; width: 75px">{{ fila.tipo_movimiento==1?'Ingreso':'Egreso' }} </div></ion-col>
+        <ion-col><div style="width: 25px"><ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></div></ion-col>
+        <ion-col><div style="width: 25px"><ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></div></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+<!-- 
     <ion-list :inset="true">
       <ion-item>
-        <ion-label><strong>Nro</strong></ion-label>
-        <ion-label><strong>Categoria</strong></ion-label>
-        <ion-label><strong>Acción</strong></ion-label>
+        <ion-label horizontal="center"><strong>Nro</strong></ion-label>
+        <ion-label horizontal="center"><strong>Categoria</strong></ion-label>
+        <ion-label horizontal="center"><strong>Tipo</strong></ion-label>
+        <ion-label horizontal="center"><strong>Acción</strong></ion-label>
       </ion-item>
       <ion-item v-for="(fila, index) in data" :key="index">
         <ion-label>{{ fila.id }}</ion-label>
-        <ion-label horizontal="right">{{ fila.nombre }}</ion-label>
-        <ion-label> <ion-fab-button size="small" :disabled="progress"><ion-icon :icon="trash" size="small"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
-        <ion-label> <ion-fab-button size="small" :disabled="progress"><ion-icon :icon="create" size="small"  @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
+        <ion-label horizontal="right">{{ fila.nombre }}{{ 'dasdasdasdadasd' }}</ion-label>
+        <ion-label horizontal="right">{{ fila.tipo_movimiento==1?'Ingreso':'Egreso' }}</ion-label>
+        <ion-label slot="end"> <ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
+        <ion-label slot="end"> <ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
 
       </ion-item>
-    </ion-list>
-    <ion-infinite-scroll @ionInfinite="ionInfinite">
+    </ion-list> -->
+    <!-- <ion-infinite-scroll @ionInfinite="ionInfinite">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    </ion-infinite-scroll> -->
     <!-- <ion-infinite-scroll @ionInfinite="ionInfinite">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll> -->
     
 
     <componentModal v-if="isOpen" @mensaje="mostrarMensaje" @abrirModal="abrirModal" @updateList="updateList" :accion="accion" :id="id"/>
-    <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="5000"></ion-toast>
+    <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="3000"></ion-toast>
 
     <ion-alert trigger="present-alert" class="custom-alert" header="Are you sure?" :buttons="alertButtons"></ion-alert>
     
@@ -39,7 +61,7 @@
 </template>
 
 <script setup>
-  import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonInfiniteScroll, IonInfiniteScrollContent ,IonAlert, alertController } from '@ionic/vue';
+  import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonAlert, alertController, IonGrid, IonCol } from '@ionic/vue';
   import { add, trash, create } from 'ionicons/icons';
   import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
   import { onMounted, ref } from 'vue';
@@ -102,7 +124,7 @@
       progress.value=false;
       swOpen.value=false;
       mensaje.value='';
-    },5000);
+    },3000);
   })
 
 
@@ -116,7 +138,7 @@
       },
     },
     {
-      text: 'Yes',
+      text: 'Si',
       cssClass: 'alert-button-confirm',
       handler: async () => {
         try {
@@ -171,4 +193,18 @@ ion-button {
 ion-fab-button {
   color: aqua;
 }
+
+.alignme {
+    text-align: right;
+}
+
+ion-col {
+    background-color: #FFFFFF;
+    border: solid 0.1px #c1c1c1;
+    color: #000;
+    text-align: center;
+    border-left: 0px;
+    border-right: 0px;
+
+  }
 </style>

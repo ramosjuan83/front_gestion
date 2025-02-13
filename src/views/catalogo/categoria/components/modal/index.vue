@@ -12,6 +12,14 @@
         </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
+        <ion-list>
+            <ion-item>
+            <ion-select aria-label="Fruit" interface="popover" v-model="objForm.tipo_movimiento" placeholder="Select tipo" :error="$v.tipo_movimiento.$error">
+                <ion-select-option value='1' >Ingreso</ion-select-option>
+                <ion-select-option value='2' >Egreso</ion-select-option>
+            </ion-select>
+            </ion-item>
+        </ion-list>
         <ion-item>
             <ion-input
             v-model="objForm.nombre"
@@ -23,14 +31,14 @@
             placeholder="Nombre"
             ></ion-input>
         </ion-item>
-        <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="5000"></ion-toast>
+        <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="3000"></ion-toast>
         </ion-content>
     </ion-modal>
 </template>  
 
 <script setup>
 
-import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput, IonToast } from '@ionic/vue';
+import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput, IonToast, IonSelect, IonSelectOption } from '@ionic/vue';
 import { defineEmits, ref , onMounted } from 'vue';
 import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
 
@@ -43,6 +51,8 @@ const emit = defineEmits(['abrirModal','updateList','mensaje']);
 
 var objForm= ref({});
 objForm.value.nombre="";
+objForm.value.tipo_movimiento=null;
+
 var mensaje=ref();
 let swOpen=ref(false);
 let titulo=ref();
@@ -58,6 +68,7 @@ onMounted(()=>{
     if(props.accion=='editar'){
         titulo.value='Editar'
         editar(props.id);
+        
 
     }else{
         titulo.value='Crear'
@@ -85,7 +96,7 @@ const confirm=(async(sw)=>{
         setTimeout(()=>{
             swOpen.value=false;
             mensaje.value='';
-        },5000);
+        },3000);
         
         
     }
@@ -97,6 +108,8 @@ const editar= (async(id)=>{
     try {
         let resul = await API_CATEGORIAS.edit(id);
         objForm.value.nombre=resul[0].nombre;
+        objForm.value.tipo_movimiento=String(resul[0].tipo_movimiento);
+
     } catch (error) {
         console.log("error",error);
     }
@@ -106,6 +119,7 @@ const editar= (async(id)=>{
 
 const rules = {
   nombre: { required },
+  tipo_movimiento: {required}
 };
 
 const $v = ref(useVuelidate(rules, objForm.value));
