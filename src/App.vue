@@ -7,12 +7,49 @@
             <ion-list-header>MasMenos</ion-list-header>
             <ion-note>hi@ionicframework.com</ion-note>
 
-            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
+            <ion-menu-toggle id="idToggle" :auto-hide="true" v-for="(p, i) in appPages" :key="i">
               <ion-item @click="selectedIndex = i" router-direction="root" :router-link="p.url" lines="none" :detail="false" class="hydrated" :class="{ selected: selectedIndex === i }">
                 <ion-icon aria-hidden="true" slot="start" :ios="p.iosIcon" :md="p.mdIcon"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
+
+            <ion-accordion-group>
+              <ion-accordion value="first">
+                <ion-item slot="header">     
+                  <ion-icon slot="start" :ios="heartOutline" :md="book" ></ion-icon>
+                  <ion-label>Catálogos</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content" >
+                <ion-icon slot="start" :ios="heartOutline" :md="list"></ion-icon><router-link class="quita_color"  to="/folder/Categoria" @click="click()">Categorías</router-link></div>
+                <div class="ion-padding" slot="content">
+                <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Subcategoria" @click="click()">Sub Categorías</router-link></div>
+
+                
+
+              </ion-accordion>
+              <ion-accordion value="second">
+                <ion-item slot="header">
+                  <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon>
+                  <ion-label>Reportes</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">Resumen</div>
+              </ion-accordion>
+              <ion-accordion value="third">
+                <ion-item slot="header">
+                  <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon>
+                  <ion-label>Configuración</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Moneda" @click="click()">Monedas</router-link></div>
+                <div class="ion-padding" slot="content">
+                  <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Tipocambio" @click="click()">Tipo Cambios</router-link></div>
+                <div class="ion-padding" slot="content">Tasa</div>
+              </ion-accordion>
+          
+            </ion-accordion-group>
+
+            
           </ion-list>
 
           <!-- <ion-list id="labels-list">
@@ -31,6 +68,8 @@
 </template>
 
 <script setup lang="ts">
+
+
 import {
   IonApp,
   IonContent,
@@ -44,6 +83,7 @@ import {
   IonNote,
   IonRouterOutlet,
   IonSplitPane,
+  IonAccordion
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
@@ -51,6 +91,7 @@ import {
   archiveSharp,
   bookmarkOutline,
   bookmarkSharp,
+  logoIonic,
   heartOutline,
   heartSharp,
   mailOutline,
@@ -61,6 +102,8 @@ import {
   trashSharp,
   warningOutline,
   warningSharp,
+  book,
+  list
 } from 'ionicons/icons';
 
 const selectedIndex = ref(0);
@@ -71,38 +114,45 @@ const appPages = [
     iosIcon: mailOutline,
     mdIcon: mailSharp,
   },
-  {
-    title: 'Categoría',
-    url: '/folder/Categoria',
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
-  },
-  {
-    title: 'Sub categoría',
-    url: '/folder/Subcategoria',
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
-  },
-  {
-    title: 'Reportes',
-    url: '/folder/Reportes',
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: 'Configuracíon',
-    url: '/folder/Configuracion',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
+  // {
+  //   title: 'Categoría',
+  //   url: '/folder/Categoria',
+  //   iosIcon: paperPlaneOutline,
+  //   mdIcon: paperPlaneSharp,
+  // },
+  // {
+  //   title: 'Sub categoría',
+  //   url: '/folder/Subcategoria',
+  //   iosIcon: heartOutline,
+  //   mdIcon: heartSharp,
+  // },
+  // {
+  //   title: 'Reportes',
+  //   url: '/folder/Reportes',
+  //   iosIcon: trashOutline,
+  //   mdIcon: trashSharp,
+  // },
+  // {
+  //   title: 'Configuracíon',
+  //   url: '/folder/Configuracion',
+  //   iosIcon: archiveOutline,
+  //   mdIcon: archiveSharp,
+  // },
 ];
 const labels = [];
+
+const click=(()=>{
+  console.log("PASA");
+  document.getElementById('idToggle').click()
+});
 
 const path = window.location.pathname.split('folder/')[1];
 if (path !== undefined) {
   selectedIndex.value = appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
 }
 </script>
+
+
 
 <style scoped>
 ion-menu ion-content {
@@ -224,4 +274,42 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+
+
+
+ion-accordion {
+    margin: 0 auto;
+  }
+
+  ion-accordion.accordion-expanding,
+  ion-accordion.accordion-expanded {
+    width: calc(100% - 32px);
+
+    margin: 16px auto;
+  }
+
+  ion-accordion.accordion-collapsing ion-item[slot='header'],
+  ion-accordion.accordion-collapsed ion-item[slot='header'] {
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-light-contrast);
+  }
+
+  ion-accordion.accordion-expanding ion-item[slot='header'],
+  ion-accordion.accordion-expanded ion-item[slot='header'] {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+
+
+  .quita_color{
+    text-decoration: none; color: inherit;
+  }
+
+  .custom-icon {
+  color:blue;
+  }
+  .custom-icon2 {
+    color:red;
+  }
 </style>

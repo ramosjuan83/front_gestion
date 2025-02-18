@@ -10,13 +10,13 @@
     <ion-list :inset="true">
       <ion-item>
         <ion-label horizontal="center"><strong>Nro</strong></ion-label>
-        <ion-label horizontal="center"><strong>Categoria</strong></ion-label>
-        <ion-label horizontal="center"><strong>Sub categoria</strong></ion-label>
+        <ion-label horizontal="center"><strong>Moneda</strong></ion-label>
+        <ion-label horizontal="center"><strong>Tipo Cambio</strong></ion-label>
         <ion-label horizontal="center"><strong>Acción</strong></ion-label>
       </ion-item>
       <ion-item v-for="(fila, index) in data" :key="index">
         <ion-label>{{ fila.id }}</ion-label>
-        <ion-label><div style="text-align: justify;">{{ fila.categorias.nombre }}</div></ion-label>
+        <ion-label><div style="text-align: justify;">{{ fila.monedas.nombre }}</div></ion-label>
         <ion-label><div style="text-align: justify;">{{ fila.nombre }}</div></ion-label>
         <ion-label slot="end"> <ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
         <ion-label slot="end"> <ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
@@ -45,7 +45,7 @@
 <script setup>
   import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonAlert, alertController } from '@ionic/vue';
   import { add, trash, create } from 'ionicons/icons';
-  import { subcategorias as API_SUBCATEGORIAS} from "@/api/subcategorias.js";
+  import { tipocambios as API_TIPOCAMBIOS} from "@/api/tipocambios.js";
   import { onMounted, ref } from 'vue';
   import componentModal from './components/modal/index.vue'
 
@@ -62,7 +62,7 @@
   let listar = (async()=>{
 
     try {
-      const res = await API_SUBCATEGORIAS.get(param);
+      const res = await API_TIPOCAMBIOS.get(param);
       data.value=res;
     } catch (error) {
       console.log("ERROR",error);
@@ -124,7 +124,7 @@
       cssClass: 'alert-button-confirm',
       handler: async () => {
         try {
-          await API_SUBCATEGORIAS.destroy(idDelete.value);
+          await API_TIPOCAMBIOS.destroy(idDelete.value);
           mensaje.value="Se eliminó con Éxito";
           updateList();
         } catch (error) {

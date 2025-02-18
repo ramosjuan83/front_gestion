@@ -14,9 +14,8 @@
         <ion-content class="ion-padding">
         <ion-list>
             <ion-item>
-            <ion-select aria-label="Fruit" interface="popover" v-model="objForm.tipo_movimiento" placeholder="Select tipo" :error="$v.tipo_movimiento.$error">
-                <ion-select-option value='1' >Ingreso</ion-select-option>
-                <ion-select-option value='2' >Egreso</ion-select-option>
+            <ion-select aria-label="Fruit" interface="popover" v-model="objForm.monedas" placeholder="Select moneda" :error="$v.monedas.$error">
+                    <ion-select-option v-for="(fila, index) in arrMonedas" :value="fila.id">{{ fila.nombre }}</ion-select-option>
             </ion-select>
             </ion-item>
         </ion-list>
@@ -39,8 +38,10 @@
 <script setup>
 
 import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput, IonToast, IonSelect, IonSelectOption } from '@ionic/vue';
-import { defineEmits, ref , onMounted } from 'vue';
-import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
+import { defineEmits, ref , onMounted, watch } from 'vue';
+import { tipocambios as API_TIPOCAMBIOS} from "@/api/tipocambios.js";
+import { monedas as API_MONEDAS} from "@/api/monedas.js";
+
 
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
@@ -51,13 +52,17 @@ const emit = defineEmits(['abrirModal','updateList','mensaje']);
 
 var objForm= ref({});
 objForm.value.nombre="";
-objForm.value.tipo_movimiento=null;
+objForm.value.monedas=null;
 objForm.value.status_id=101;
+
 
 
 var mensaje=ref();
 let swOpen=ref(false);
 let titulo=ref();
+
+
+let arrMonedas = ref([]);
 
 
 
@@ -66,6 +71,9 @@ const setOpen=((sw)=>{
 });
 
 onMounted(()=>{
+
+
+    cargarMonedas();
 
     if(props.accion=='editar'){
         titulo.value='Editar'
@@ -81,10 +89,13 @@ onMounted(()=>{
 const confirm=(async(sw)=>{
     try {
         if(props.accion=='crear'){
-            await API_CATEGORIAS.store(objForm.value);
+            await API_TIPOCAMBIOS.store(objForm.value);
             emit('mensaje','Se guardo con Éxito');
         }else if(props.accion=='editar'){
-            await API_CATEGORIAS.update(props.id,objForm.value);
+
+            delete objForm.value.tipo_movimiento;
+
+            await API_TIPOCAMBIOS.update(props.id,objForm.value);
             emit('mensaje','Se actualizó con Éxito');
         }
         
@@ -108,9 +119,12 @@ const confirm=(async(sw)=>{
 const editar= (async(id)=>{
 
     try {
-        let resul = await API_CATEGORIAS.edit(id);
+        let resul = await API_TIPOCAMBIOS.edit(id);
+        
+        //let arrCat= await API_CATEGORIAS.edit(resul[0].categoria_id);
+        objForm.value.monedas=String(resul[0].monedas.id);
         objForm.value.nombre=resul[0].nombre;
-        objForm.value.tipo_movimiento=String(resul[0].tipo_movimiento);
+
 
     } catch (error) {
         console.log("error",error);
@@ -118,10 +132,29 @@ const editar= (async(id)=>{
 });
 
 
+const cargarMonedas= async()=>{
+    try {
+        let res = await API_MONEDAS.get();
+        arrMonedas.value=res;
+    } catch (error) {
+        console.log("error",error);
+    }
+}
+
+// watch(
+//     () => objForm.value.tipo_movimiento,
+//     async (nval) => {
+
+        
+
+        
+//     }
+//   );
+
 
 const rules = {
   nombre: { required },
-  tipo_movimiento: {required}
+  monedas: {required},
 };
 
 const $v = ref(useVuelidate(rules, objForm.value));

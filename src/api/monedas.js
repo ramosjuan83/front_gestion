@@ -1,10 +1,10 @@
 import axios from "./axios";
 
-export const categorias = {
+export const monedas = {
   get(filtros) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`categoria`, {
+        .get(`moneda`, {
           params: {
             filtros,
           },
@@ -32,7 +32,7 @@ export const categorias = {
   store(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post(`/categoria`, data)
+        .post(`/moneda`, data)
         .then((res) => {
           resolve(res.data);
         })
@@ -44,7 +44,7 @@ export const categorias = {
   edit(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/categoria/${id}`)
+        .get(`/moneda/${id}`)
         .then((res) => {
           resolve(res.data);
         })
@@ -56,7 +56,7 @@ export const categorias = {
   tipo_movimiento(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/categoria/tipo/${id}`)
+        .get(`/moneda/tipo/${id}`)
         .then((res) => {
           resolve(res);
         })
@@ -68,7 +68,7 @@ export const categorias = {
   update(id,data) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`/categoria/${id}`, data)
+        .put(`/moneda/${id}`, data)
         .then((res) => {
           resolve(res.data);
         })
@@ -92,7 +92,7 @@ export const categorias = {
   destroy(id) {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`/categoria/${id}`)
+        .delete(`/moneda/${id}`)
         .then((res) => {
           resolve(res.data);
         })

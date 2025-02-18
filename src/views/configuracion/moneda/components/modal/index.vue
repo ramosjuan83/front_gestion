@@ -12,14 +12,6 @@
         </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-        <ion-list>
-            <ion-item>
-            <ion-select aria-label="Fruit" interface="popover" v-model="objForm.tipo_movimiento" placeholder="Select tipo" :error="$v.tipo_movimiento.$error">
-                <ion-select-option value='1' >Ingreso</ion-select-option>
-                <ion-select-option value='2' >Egreso</ion-select-option>
-            </ion-select>
-            </ion-item>
-        </ion-list>
         <ion-item>
             <ion-input
             v-model="objForm.nombre"
@@ -31,6 +23,29 @@
             placeholder="Nombre"
             ></ion-input>
         </ion-item>
+        <ion-item>
+            <ion-input
+            v-model="objForm.abreviatura"
+            label="Ingrese la abreviatura"
+            label-placement="stacked"
+            :error="$v.abreviatura.$error"
+            ref="input"
+            type="text"
+            placeholder="Abreviatura"
+            ></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input
+            v-model="objForm.simbolo"
+            label="Ingrese la simbolo"
+            label-placement="stacked"
+            :error="$v.simbolo.$error"
+            ref="input"
+            type="text"
+            placeholder="Símbolo"
+            ></ion-input>
+        </ion-item>
+
         <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="3000"></ion-toast>
         </ion-content>
     </ion-modal>
@@ -40,7 +55,7 @@
 
 import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonModal, IonButton, IonInput, IonToast, IonSelect, IonSelectOption } from '@ionic/vue';
 import { defineEmits, ref , onMounted } from 'vue';
-import { categorias as API_CATEGORIAS} from "@/api/categorias.js";
+import { monedas as API_MONEDAS} from "@/api/monedas.js";
 
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
@@ -51,7 +66,8 @@ const emit = defineEmits(['abrirModal','updateList','mensaje']);
 
 var objForm= ref({});
 objForm.value.nombre="";
-objForm.value.tipo_movimiento=null;
+objForm.value.abreviatura=null;
+objForm.value.simbolo=null;
 objForm.value.status_id=101;
 
 
@@ -81,10 +97,10 @@ onMounted(()=>{
 const confirm=(async(sw)=>{
     try {
         if(props.accion=='crear'){
-            await API_CATEGORIAS.store(objForm.value);
+            await API_MONEDAS.store(objForm.value);
             emit('mensaje','Se guardo con Éxito');
         }else if(props.accion=='editar'){
-            await API_CATEGORIAS.update(props.id,objForm.value);
+            await API_MONEDAS.update(props.id,objForm.value);
             emit('mensaje','Se actualizó con Éxito');
         }
         
@@ -108,9 +124,10 @@ const confirm=(async(sw)=>{
 const editar= (async(id)=>{
 
     try {
-        let resul = await API_CATEGORIAS.edit(id);
+        let resul = await API_MONEDAS.edit(id);
         objForm.value.nombre=resul[0].nombre;
-        objForm.value.tipo_movimiento=String(resul[0].tipo_movimiento);
+        objForm.value.abreviatura=resul[0].abreviatura;
+        objForm.value.simbolo=resul[0].simbolo;
 
     } catch (error) {
         console.log("error",error);
@@ -121,7 +138,8 @@ const editar= (async(id)=>{
 
 const rules = {
   nombre: { required },
-  tipo_movimiento: {required}
+  abreviatura: {required},
+  simbolo: {required}
 };
 
 const $v = ref(useVuelidate(rules, objForm.value));
