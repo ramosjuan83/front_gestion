@@ -22,6 +22,10 @@
         <inicio v-if="$route.params.id=='Dashboard'" />
         <catalogoCategoria v-if="$route.params.id=='Categoria'" />
         <catalogoSubcategoria v-if="$route.params.id=='Subcategoria'" />
+        <configuracionMoneda v-if="$route.params.id=='Moneda'" />
+        <configuracionTipocambio v-if="$route.params.id=='Tipocambio'" />
+
+
       <!-- </div> -->
     <!-- </ion-content> -->
   </ion-page>
@@ -32,6 +36,9 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 
 import catalogoCategoria from './catalogo/categoria/index.vue'
 import catalogoSubcategoria from './catalogo/subcategoria/index.vue'
+import configuracionMoneda from './configuracion/moneda/index.vue'
+import configuracionTipocambio from './configuracion/tipocambio/index.vue'
+
 import inicio from './inicio/index.vue';
 
 

@@ -6,25 +6,7 @@
     </ion-fab>
   <ion-content color="light">
 
-  <ion-list >    
-    <ion-grid>
-      <ion-row>
-        <ion-col><div style="width: 75px"><strong>Nro</strong></div></ion-col>
-        <ion-col><div style="width: 150px; text-align: center;"><strong>Categoria</strong></div></ion-col>
-        <ion-col><div style="width: 75px"><strong>Tipo</strong></div></ion-col>
-        <ion-col><div style="width: 50px"><strong>Acción</strong></div></ion-col>
-  
-      </ion-row>
-      <ion-row v-for="(fila, index) in data" :key="index">
-        <ion-col><div style="width: 75px">{{ fila.id }}</div></ion-col>
-        <ion-col><div style="width: 150px; text-align: justify;">{{ fila.nombre }}</div></ion-col>
-        <ion-col><div style="text-align: center; width: 75px">{{ fila.tipo_movimiento==1?'Ingreso':'Egreso' }} </div></ion-col>
-        <ion-col><div style="width: 25px"><ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></div></ion-col>
-        <ion-col><div style="width: 25px"><ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></div></ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-list>
-<!-- 
+
     <ion-list :inset="true">
       <ion-item>
         <ion-label horizontal="center"><strong>Nro</strong></ion-label>
@@ -34,13 +16,13 @@
       </ion-item>
       <ion-item v-for="(fila, index) in data" :key="index">
         <ion-label>{{ fila.id }}</ion-label>
-        <ion-label horizontal="right">{{ fila.nombre }}{{ 'dasdasdasdadasd' }}</ion-label>
-        <ion-label horizontal="right">{{ fila.tipo_movimiento==1?'Ingreso':'Egreso' }}</ion-label>
+        <ion-label><div style="text-align: justify;">{{ fila.nombre }}</div></ion-label>
+        <ion-label><div style="text-align: center;">{{ fila.tipo_movimiento==1?'Ingreso':'Egreso' }}</div></ion-label>
         <ion-label slot="end"> <ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
         <ion-label slot="end"> <ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
 
       </ion-item>
-    </ion-list> -->
+    </ion-list>
     <!-- <ion-infinite-scroll @ionInfinite="ionInfinite">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll> -->
