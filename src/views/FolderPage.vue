@@ -24,6 +24,8 @@
         <catalogoSubcategoria v-if="$route.params.id=='Subcategoria'" />
         <configuracionMoneda v-if="$route.params.id=='Moneda'" />
         <configuracionTipocambio v-if="$route.params.id=='Tipocambio'" />
+        <configuracionTasa v-if="$route.params.id=='Tasa'" />
+        
 
 
       <!-- </div> -->
@@ -38,6 +40,8 @@ import catalogoCategoria from './catalogo/categoria/index.vue'
 import catalogoSubcategoria from './catalogo/subcategoria/index.vue'
 import configuracionMoneda from './configuracion/moneda/index.vue'
 import configuracionTipocambio from './configuracion/tipocambio/index.vue'
+import configuracionTasa from './configuracion/tasa/index.vue'
+
 
 import inicio from './inicio/index.vue';
 
