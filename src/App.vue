@@ -44,7 +44,8 @@
                 <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Moneda" @click="click()">Monedas</router-link></div>
                 <div class="ion-padding" slot="content">
                   <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Tipocambio" @click="click()">Tipo Cambios</router-link></div>
-                <div class="ion-padding" slot="content">Tasa</div>
+                  <div class="ion-padding" slot="content">
+                  <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Tasa" @click="click()">Tasas</router-link></div>
               </ion-accordion>
           
             </ion-accordion-group>

@@ -1,10 +1,10 @@
 import axios from "./axios";
 
-export const tipocambios = {
+export const tasas = {
   get(filtros) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`tipocambio`, {
+        .get(`tasa`, {
           params: {
             filtros,
           },
@@ -32,21 +32,9 @@ export const tipocambios = {
   store(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post(`/tipocambio`, data)
+        .post(`/tasa`, data)
         .then((res) => {
           resolve(res.data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  },
-  tipo_cambio(id) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`/tipocambio/tipo/${id}`)
-        .then((res) => {
-          resolve(res);
         })
         .catch((err) => {
           reject(err);
@@ -56,9 +44,21 @@ export const tipocambios = {
   edit(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/tipocambio/${id}`)
+        .get(`/tasa/${id}`)
         .then((res) => {
           resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+  tipo_movimiento(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/tasa/tipo/${id}`)
+        .then((res) => {
+          resolve(res);
         })
         .catch((err) => {
           reject(err);
@@ -68,7 +68,7 @@ export const tipocambios = {
   update(id,data) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`/tipocambio/${id}`, data)
+        .put(`/tasa/${id}`, data)
         .then((res) => {
           resolve(res.data);
         })
@@ -77,6 +77,7 @@ export const tipocambios = {
         });
     });
   },
+  
   recycle(id) {
     return new Promise((resolve, reject) => {
       axios
@@ -92,7 +93,7 @@ export const tipocambios = {
   destroy(id) {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`/tipocambio/${id}`)
+        .delete(`/tasa/${id}`)
         .then((res) => {
           resolve(res.data);
         })
