@@ -17,6 +17,18 @@ export const subcategorias = {
         });
     });
   },
+  tipo_categoria(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/subcategoria/tipo/${id}`)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
   create() {
     return new Promise((resolve, reject) => {
       axios
