@@ -1,30 +1,12 @@
 import axios from "./axios";
 
-export const tasas = {
+export const movimientos = {
   get(filtros) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`tasa`, {
-          params: {
-            filtros,
-          },
-        })
-        .then((res) => {
-          resolve(res.data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  },
-  defecto(filtros) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`/tasa/tasa_defecto`, {
-          params: {
-            filtros,
-          },
-        })
+        .post(`movimiento`,
+          filtros
+        )
         .then((res) => {
           resolve(res.data);
         })
@@ -48,7 +30,7 @@ export const tasas = {
   store(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post(`/tasa`, data)
+        .post(`/movimiento`, data)
         .then((res) => {
           resolve(res.data);
         })
@@ -60,21 +42,9 @@ export const tasas = {
   edit(id) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`/tasa/${id}`)
+        .get(`/movimiento/${id}`)
         .then((res) => {
           resolve(res.data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
-  },
-  tipo_movimiento(id) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`/tasa/tipo/${id}`)
-        .then((res) => {
-          resolve(res);
         })
         .catch((err) => {
           reject(err);
@@ -84,7 +54,7 @@ export const tasas = {
   update(id,data) {
     return new Promise((resolve, reject) => {
       axios
-        .put(`/tasa/${id}`, data)
+        .put(`/movimiento/${id}`, data)
         .then((res) => {
           resolve(res.data);
         })
@@ -93,7 +63,6 @@ export const tasas = {
         });
     });
   },
-  
   recycle(id) {
     return new Promise((resolve, reject) => {
       axios
@@ -109,7 +78,7 @@ export const tasas = {
   destroy(id) {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`/tasa/${id}`)
+        .delete(`/movimiento/${id}`)
         .then((res) => {
           resolve(res.data);
         })
