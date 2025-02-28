@@ -1,9 +1,6 @@
 <template>
   <ion-fab horizontal="end" vertical="bottom">
-      <ion-fab-button :disabled="progress">
-        <ion-icon :icon="add"  @click="setOpen(true)"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+
   <ion-content color="light">
 
 
