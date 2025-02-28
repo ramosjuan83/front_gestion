@@ -232,7 +232,7 @@ i.icon::before {
 }
 
 ion-button {
-  color: white;
+  color: red;
 }
 
 ion-fab-button {

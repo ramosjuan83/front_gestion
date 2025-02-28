@@ -40,7 +40,7 @@ import { IonContent, IonItem, IonHeader, IonToolbar, IonButtons, IonTitle, IonMo
 import { defineEmits, ref , onMounted, watch } from 'vue';
 import  {formatNumber} from '../../../../../utils/calc.js';
 import { eye } from 'ionicons/icons';
-import moment from 'moment';
+import lodash from 'lodash';
 
 const props = defineProps(['data','id']);
 const emit = defineEmits(['cerrarDetalleCategoria']);
@@ -49,8 +49,7 @@ const titulo=ref('');
 
 onMounted(async ()=>{
 
-    console.log('data', props.data);
-    dataCategorias.value=props.data.categorias;
+    dataCategorias.value=lodash.orderBy(props.data.categorias, ["monto_divisas"], ["desc"]);
     titulo.value=props.data.tipo_movimiento;
 });
 
