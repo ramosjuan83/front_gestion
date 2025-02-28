@@ -38,6 +38,17 @@
         </ion-list>
         <ion-item>
             <ion-input
+            v-model="objForm.fecha_movimiento"
+            label="Fecha:"
+            label-placement="stacked"
+            ref="input"
+            type="date"
+            placeholder="Fecha"
+            @change="listar()"
+            ></ion-input>
+        </ion-item> 
+        <ion-item>
+            <ion-input
             v-model="moneda"
             label="Moneda"
             label-placement="stacked"
@@ -157,10 +168,10 @@ const setOpen=((sw)=>{
 const calcular=((tipo)=>{
 
     if(tipo=='bolivares'){
-        objForm.value.monto_divisas=objForm.value.monto_bolivares/monto_tasa.value;
+        objForm.value.monto_divisas=(objForm.value.monto_bolivares/monto_tasa.value).toFixed(2);
         objForm.value.monto_bolivares=parseFloat(objForm.value.monto_bolivares);
     }else{
-        objForm.value.monto_bolivares=objForm.value.monto_divisas*monto_tasa.value;
+        objForm.value.monto_bolivares=(objForm.value.monto_divisas*monto_tasa.value).toFixed(2);
         objForm.value.monto_divisas=parseFloat(objForm.value.monto_divisas);
     }
 
