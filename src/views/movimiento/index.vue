@@ -44,7 +44,7 @@
         <ion-item>
           <ion-label horizontal="center"><strong>Nro: </strong>{{ fila.id }}</ion-label>
           <ion-label horizontal="center"><strong>Categoría: </strong> {{ fila.categorias.nombre }}</ion-label>
-          <ion-label horizontal="center"><strong>Sub Categoría: </strong> {{ fila.subcategorias?nombre:'No Aplica' }}</ion-label>
+          <ion-label horizontal="center"><strong>Sub Categoría: </strong> {{ fila.subcategorias?fila.subcategorias.nombre:'No Aplica' }}</ion-label>
         </ion-item>
         <ion-item>
           <ion-label horizontal="center"><strong>Fecha: {{ fila.fecha_movimiento }}</strong></ion-label>
@@ -83,7 +83,7 @@
 
 <script setup>
   import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonAlert, alertController, IonInput } from '@ionic/vue';
-  import { add, trash, create } from 'ionicons/icons';
+  import { add, trash, create, cloudyNight } from 'ionicons/icons';
   import { movimientos as API_MOVIMIENTOS} from "@/api/movimientos.js";
   import { onMounted, ref} from 'vue';
   import componentModal from './components/modal/index.vue'
@@ -101,7 +101,9 @@
   let error1=ref('');
   let progress=ref(false);
 
-  let fecha_desde=ref(moment().format("YYYY-MM-DD"));
+  let fecha_inicio = moment().format("YYYY-MM-DD");
+
+  let fecha_desde=ref(fecha_inicio.substring(0,7)+"-01");
   let fecha_hasta=ref(moment().format("YYYY-MM-DD"))
 
   let listar = (async()=>{
@@ -110,6 +112,7 @@
 
 
       const res = await API_MOVIMIENTOS.get({fecha_desde:fecha_desde.value,fecha_hasta:fecha_hasta.value});
+      console.log("res",res);
       totales.value=res.totales;
       totales.value.ingreso=formatNumber(totales.value.ingreso.toFixed(2),2);
       totales.value.egreso=formatNumber(totales.value.egreso.toFixed(2),2);

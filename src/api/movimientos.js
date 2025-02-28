@@ -30,7 +30,7 @@ export const movimientos = {
   store(data) {
     return new Promise((resolve, reject) => {
       axios
-        .post(`/movimiento`, data)
+        .post(`/movimiento/store`, data)
         .then((res) => {
           resolve(res.data);
         })
