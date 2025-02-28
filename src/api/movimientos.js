@@ -15,6 +15,20 @@ export const movimientos = {
         });
     });
   },
+  getResumen(filtros) {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`movimiento/resumen`,
+          filtros
+        )
+        .then((res) => {
+          resolve(res.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
   create() {
     return new Promise((resolve, reject) => {
       axios

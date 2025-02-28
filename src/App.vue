@@ -33,7 +33,8 @@
                   <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon>
                   <ion-label>Reportes</ion-label>
                 </ion-item>
-                <div class="ion-padding" slot="content">Resumen</div>
+                <div class="ion-padding" slot="content">
+                <ion-icon slot="start" :ios="heartOutline" :md="list" ></ion-icon><router-link class="quita_color" to="/folder/Resumen" @click="click()">Resumen</router-link></div>
               </ion-accordion>
               <ion-accordion value="third">
                 <ion-item slot="header">
