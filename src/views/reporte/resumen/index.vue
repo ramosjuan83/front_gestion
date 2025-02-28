@@ -9,17 +9,6 @@
 
     <ion-list :inset="true">
         <ion-item>
-          <ion-label horizontal="center"><strong> -- Totales --</strong></ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label horizontal="end"><strong>Ingresos: </strong>{{ totales.ingreso }}</ion-label>
-          <ion-label horizontal="end"><strong>Egresos: </strong> {{ totales.egreso }}</ion-label>
-          <ion-label horizontal="end"><strong>Saldo: </strong> {{ totales.saldo }}</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label horizontal="center"><strong> -- ------ --</strong></ion-label>
-        </ion-item>
-        <ion-item>
             <ion-input
             v-model="fecha_desde"
             label="Fecha desde"
@@ -42,23 +31,9 @@
      
       <template v-for="(fila, index) in data" :key="index">
         <ion-item>
-          <ion-label horizontal="center"><strong>Nro: </strong>{{ fila.id }}</ion-label>
-          <ion-label horizontal="center"><strong>Categoría: </strong> {{ fila.categorias.nombre }}</ion-label>
-          <ion-label horizontal="center"><strong>Sub Categoría: </strong> {{ fila.subcategorias?fila.subcategorias.nombre:'No Aplica' }}</ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label horizontal="center"><strong>Fecha: {{ fila.fecha_movimiento }}</strong></ion-label>
-          <ion-label horizontal="center"><strong>Hora: {{ fila.hora }} </strong> </ion-label>
-          <ion-label horizontal="center"><strong>Monto Tasa: {{ fila.tasas.monto_tasa }} </strong></ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label horizontal="center"><strong>Monto Bolivares: {{ fila.monto_bolivares }}</strong></ion-label>
-          <ion-label horizontal="center"><strong>Monto Divisas: {{ fila.monto_divisas }} </strong> </ion-label>
-          <ion-label horizontal="center"><strong>Moneda: {{ fila.tasas.monedas.nombre  }} </strong></ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-label slot="end"> <ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="trash" size="small" color="danger"  @click="presentAlert(fila.id)"></ion-icon></ion-fab-button></ion-label>
-          <ion-label slot="end"> <ion-fab-button color="light" size="small" :disabled="progress"><ion-icon :icon="create" size="small" color="primary" @click="edit(fila.id)"></ion-icon></ion-fab-button></ion-label>
+          <ion-label horizontal="center"><strong>{{ fila.tipo_movimiento }}</strong></ion-label>
+          <ion-label horizontal="center"><strong>{{ formatNumber(fila.monto_divisas, 2) }}</strong> </ion-label>
+          <ion-label slot="end"> <ion-fab-button color="light"  size="small" :disabled="progress"><ion-icon :icon="eye" size="small" color="success"  @click="mostrarResumen(fila.id, fila)"></ion-icon></ion-fab-button></ion-label>
         </ion-item>
       </template>
     </ion-list>
@@ -70,7 +45,7 @@
     </ion-infinite-scroll> -->
     
 
-    <componentModal v-if="isOpen" @mensaje="mostrarMensaje" @abrirModal="abrirModal" @updateList="updateList" :accion="accion" :id="id"/>
+    <resumenCategoria v-if="isOpen" :data="objCategorias" @cerrarDetalleCategoria="cerrarDetalle"/>
     <ion-toast trigger="open-toast" :is-open="swOpen" :message="mensaje" :duration="3000"></ion-toast>
 
     <ion-alert trigger="present-alert" class="custom-alert" header="Are you sure?" :buttons="alertButtons"></ion-alert>
@@ -83,17 +58,18 @@
 
 <script setup>
   import { IonContent, IonItem, IonLabel, IonList, IonIcon, IonFabButton, IonFab, IonToast, IonAlert, alertController, IonInput } from '@ionic/vue';
-  import { add, trash, create } from 'ionicons/icons';
+  import { add, trash, create, eye } from 'ionicons/icons';
   import { movimientos as API_MOVIMIENTOS} from "@/api/movimientos.js";
   import { onMounted, ref} from 'vue';
-  import componentModal from './components/modal/index.vue'
+  import resumenCategoria from './components/resumen_categoria/index.vue'
   import moment from 'moment';
-  import  {formatNumber} from '../../utils/calc.js'
+  import  {formatNumber} from '../../../utils/calc.js'
 
   
   let param={};
   let data=ref([]);
   let totales=ref({});
+  let objCategorias=ref({});
 
   let swOpen=ref(false);
   let mostrarAlert=ref(false);
@@ -111,22 +87,23 @@
     try {
 
 
-      const res = await API_MOVIMIENTOS.get({fecha_desde:fecha_desde.value,fecha_hasta:fecha_hasta.value});
-      //console.log("res",res);
-      totales.value=res.totales;
-      totales.value.ingreso=formatNumber(totales.value.ingreso.toFixed(2),2);
-      totales.value.egreso=formatNumber(totales.value.egreso.toFixed(2),2);
-      totales.value.saldo=formatNumber(totales.value.saldo.toFixed(2),2);
+      const res = await API_MOVIMIENTOS.getResumen({fecha_desde:fecha_desde.value,fecha_hasta:fecha_hasta.value});
+      console.log("res",res.resumen);
+      data.value=res.resumen;
+      // totales.value=res.totales;
+      // totales.value.ingreso=formatNumber(totales.value.ingreso.toFixed(2),2);
+      // totales.value.egreso=formatNumber(totales.value.egreso.toFixed(2),2);
+      // totales.value.saldo=formatNumber(totales.value.saldo.toFixed(2),2);
 
 
-      data.value=res.movimiento.map((e)=>{
-        return {
-          ...e,
-          monto_bolivares: formatNumber(e.monto_bolivares.toFixed(2),2),
-          monto_divisas: formatNumber(e.monto_divisas.toFixed(2),2),
-          fecha_movimiento:moment(e.fecha_movimiento).format('DD/MM/YYYY')
-        }
-      });
+      // data.value=res.movimiento.map((e)=>{
+      //   return {
+      //     ...e,
+      //     monto_bolivares: formatNumber(e.monto_bolivares.toFixed(2),2),
+      //     monto_divisas: formatNumber(e.monto_divisas.toFixed(2),2),
+      //     fecha_movimiento:moment(e.fecha_movimiento).format('DD/MM/YYYY')
+      //   }
+      // });
     } catch (error) {
       console.log("ERROR",error);
       error1.value=error;
@@ -147,6 +124,10 @@
     isOpen.value = open
   }
   );
+
+  const cerrarDetalle = (()=>{
+    isOpen.value=false;
+  });
 
   const confirm = (()=>{
     isOpen.value = false;
@@ -199,16 +180,11 @@
     },
   ];
 
-const presentAlert = async (id) => {
-  const alert = await alertController.create({
-    header: '',
-    subHeader: '',
-    message: 'Esta seguro de eliminar el movimiento.',
-    buttons: alertButtons,
-  });
-
-  let res = await alert.present();
-  idDelete.value=id;
+const mostrarResumen = async (id, fila) => {
+    isOpen.value=true;
+    console.log("fila",fila);
+    objCategorias.value.tipo_movimiento=fila.tipo_movimiento;
+    objCategorias.value.categorias=fila.categorias;
 };
 
 const mostrarMensaje=((msg)=>{
@@ -231,9 +207,6 @@ i.icon::before {
     font-size: 5px;
 }
 
-ion-button {
-  color: white;
-}
 
 ion-fab-button {
   color: aqua;
