@@ -2,10 +2,6 @@
     <ion-content color="light">
       <ion-list :inset="true">
         <ion-item>
-            <ion-label horizontal="center"><strong> {{ titulo }}</strong></ion-label>
-            <ion-label horizontal="end"><ion-button @click="emit('cerrarDetalleCategoria');">cerrar</ion-button></ion-label>
-          </ion-item>
-        <ion-item>
             <ion-label horizontal="center"><strong> Categoría</strong></ion-label>
             <ion-label horizontal="center"><strong> Monto </strong> </ion-label>
             <ion-label slot="end"><strong> Acción </strong></ion-label>
