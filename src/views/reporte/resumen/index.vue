@@ -1,6 +1,4 @@
 <template>
-  <ion-fab horizontal="end" vertical="bottom">
-
   <ion-content color="light">
 
 
