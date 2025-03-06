@@ -26,7 +26,7 @@
 import { defineEmits, ref , onMounted } from 'vue';
 import  {formatNumber} from '../../../../../../utils/calc.js';
 // import { eye } from 'ionicons/icons';
-// import lodash from 'lodash';
+import lodash from 'lodash';
 
 const props = defineProps(['data']);
 const dataSubcategorias = ref([]);
@@ -36,10 +36,7 @@ const emit = defineEmits(['cerrarDetalleSubCategoria']);
 
 onMounted(async ()=>{
 
-    //dataSubcategorias.value=lodash.orderBy(props.data.categorias, ["monto_divisas"], ["desc"]);
-    //console.log("prueba",props.data);
-    dataSubcategorias.value=props.data;
-    //titulo.value=props.data.tipo_movimiento;
+    dataSubcategorias.value=lodash.orderBy(props.data,["monto_divisas"],["desc"]);
 });
 
 
